@@ -1,56 +1,18 @@
-Type: AWS::EC2::Instance
-Properties: 
-  AdditionalInfo: String
-  Affinity: String
-  AvailabilityZone: String
-  BlockDeviceMappings: 
-    - BlockDeviceMapping
-  CpuOptions: 
-    CpuOptions
-  CreditSpecification: 
-    CreditSpecification
-  DisableApiTermination: Boolean
-  EbsOptimized: Boolean
-  ElasticGpuSpecifications: 
-    - ElasticGpuSpecification
-  ElasticInferenceAccelerators: 
-    - ElasticInferenceAccelerator
-  EnclaveOptions: 
-    EnclaveOptions
-  HibernationOptions: 
-    HibernationOptions
-  HostId: String
-  HostResourceGroupArn: String
-  IamInstanceProfile: String
-  ImageId: String
-  InstanceInitiatedShutdownBehavior: String
-  InstanceType: String
-  Ipv6AddressCount: Integer
-  Ipv6Addresses: 
-    - InstanceIpv6Address
-  KernelId: String
-  KeyName: String
-  LaunchTemplate: 
-    LaunchTemplateSpecification
-  LicenseSpecifications: 
-    - LicenseSpecification
-  Monitoring: Boolean
-  NetworkInterfaces: 
-    - NetworkInterface
-  PlacementGroupName: String
-  PrivateIpAddress: String
-  RamdiskId: String
-  SecurityGroupIds: 
-    - String
-  SecurityGroups: 
-    - String
-  SourceDestCheck: Boolean
-  SsmAssociations: 
-    - SsmAssociation
-  SubnetId: String
-  Tags: 
-    - Tag
-  Tenancy: String
-  UserData: String
-  Volumes: 
-    - Volume
+Resources:
+EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+        ImageId: !FindInMap [ AWSRegionArch2AMI, !Ref 'AWS::Region' , !FindInMap [ AWSInstanceType2Arch, !Ref InstanceType, Arch ] ]
+        KeyName: !Ref KeyName
+        InstanceType: !Ref InstanceType
+        SecurityGroups:
+        - !Ref Ec2SecurityGroup
+        BlockDeviceMappings:
+        -
+          DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 50
+        -
+          DeviceName: /dev/sdm
+          Ebs:
+            VolumeSize: 100
